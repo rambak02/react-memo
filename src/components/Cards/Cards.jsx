@@ -5,6 +5,7 @@ import styles from "./Cards.module.css";
 import { EndGameModal } from "../../components/EndGameModal/EndGameModal";
 import { Button } from "../../components/Button/Button";
 import { Card } from "../../components/Card/Card";
+import { useEasyModeContext } from "../../context/hooks/useEasyMode";
 
 // Игра закончилась
 const STATUS_LOST = "STATUS_LOST";
@@ -41,6 +42,10 @@ function getTimerValue(startDate, endDate) {
  * previewSeconds - сколько секунд пользователь будет видеть все карты открытыми до начала игры
  */
 export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
+  //Упрощенный режим игры
+  const { easyGameMode } = useEasyModeContext();
+  //Кол-во оставшихся жизней
+  const [lifes, setLifes] = useState(3);
   // В cards лежит игровое поле - массив карт и их состояние открыта\закрыта
   const [cards, setCards] = useState([]);
   // Текущий статус игры
@@ -73,6 +78,9 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
     setGameEndDate(null);
     setTimer(getTimerValue(null, null));
     setStatus(STATUS_PREVIEW);
+    if (easyGameMode) {
+      setLifes(3);
+    }
   }
 
   /**
@@ -122,13 +130,29 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
 
       return false;
     });
-
-    const playerLost = openCardsWithoutPair.length >= 2;
-
-    // "Игрок проиграл", т.к на поле есть две открытые карты без пары
-    if (playerLost) {
-      finishGame(STATUS_LOST);
-      return;
+    if (easyGameMode) {
+      if (openCardsWithoutPair.length >= 2) {
+        openCardsWithoutPair.forEach(wrongCard => {
+          const foundWrongCard = nextCards.find(card => card.id === wrongCard.id);
+          if (foundWrongCard) {
+            foundWrongCard.open = false;
+          }
+        });
+        setLifes(lifes => lifes - 1);
+        setCards([...nextCards]);
+      }
+      // "Игрок проиграл", т.к у него не осталось жизней
+      if (lifes === 0) {
+        finishGame(STATUS_LOST);
+        return;
+      }
+    } else {
+      const playerLost = openCardsWithoutPair.length >= 2;
+      // "Игрок проиграл", т.к на поле есть две открытые карты без пары
+      if (playerLost) {
+        finishGame(STATUS_LOST);
+        return;
+      }
     }
 
     // ... игра продолжается
@@ -195,9 +219,9 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
             </>
           )}
         </div>
+        {easyGameMode && <div className={styles.lifeImage}>Жизней: {lifes}</div>}
         {status === STATUS_IN_PROGRESS ? <Button onClick={resetGame}>Начать заново</Button> : null}
       </div>
-
       <div className={styles.cards}>
         {cards.map(card => (
           <Card
