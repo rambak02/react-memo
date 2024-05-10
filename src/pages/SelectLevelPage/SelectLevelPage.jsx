@@ -25,11 +25,11 @@ export function SelectLevelPage() {
             </Link>
           </li>
         </ul>
+        <label className={styles.easyMode}>
+          <input className={styles.easyModeInput} onClick={easyModeToggle} type="checkbox" name="checkbox" />
+          Легкий режим
+        </label>
       </div>
-      <label>
-        <input className={styles.easyMode} onClick={easyModeToggle} type="checkbox" name="checkbox" />
-        Легкий режим
-      </label>
     </div>
   );
 }

@@ -110,7 +110,6 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
     setCards(nextCards);
 
     const isPlayerWon = nextCards.every(card => card.open);
-
     // Победа - все карты на поле открыты
     if (isPlayerWon) {
       finishGame(STATUS_WON);
@@ -130,21 +129,24 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
 
       return false;
     });
+    //Ищем
     if (easyGameMode) {
       if (openCardsWithoutPair.length >= 2) {
         openCardsWithoutPair.forEach(wrongCard => {
           const foundWrongCard = nextCards.find(card => card.id === wrongCard.id);
-          if (foundWrongCard) {
-            foundWrongCard.open = false;
-          }
+          setTimeout(() => {
+            if (foundWrongCard) {
+              foundWrongCard.open = false;
+            }
+          }, 1000);
         });
-        setLifes(lifes => lifes - 1);
+        setLifes(lifes - 1);
         setCards([...nextCards]);
-      }
-      // "Игрок проиграл", т.к у него не осталось жизней
-      if (lifes === 0) {
-        finishGame(STATUS_LOST);
-        return;
+        //Если у игрока была 1 жизнь, то значит это была его последняя попытка
+        if (lifes === 1) {
+          finishGame(STATUS_LOST);
+          return;
+        }
       }
     } else {
       const playerLost = openCardsWithoutPair.length >= 2;
@@ -154,8 +156,6 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
         return;
       }
     }
-
-    // ... игра продолжается
   };
 
   const isGameEnded = status === STATUS_LOST || status === STATUS_WON;
