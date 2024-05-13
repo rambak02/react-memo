@@ -5,7 +5,13 @@ import { useLeaderContext } from "../../context/hooks/useLeader";
 import { formatTime } from "../helpers/helpers";
 
 export const Leaderboard = () => {
-  const { leaders, loaded, leaderboardModeOn } = useLeaderContext();
+  const { leaders, setLeaders, loaded, leaderboardModeOn } = useLeaderContext();
+  const newLeaders = leaders.sort((a, b) => {
+    return a.time - b.time;
+  });
+  setLeaders(newLeaders);
+  console.log("render");
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -21,9 +27,9 @@ export const Leaderboard = () => {
       </div>
       {loaded ? (
         <ul className={styles.leaderboardList}>
-          {leaders.map(leader => (
+          {leaders.map((leader, index) => (
             <div key={leader.id} className={styles.user}>
-              <div className={styles.rating}>#{leader.id}</div>
+              <div className={styles.rating}>#{index + 1}</div>
               <div className={styles.userName}>{leader.name}</div>
               <div className={styles.userTime}>{formatTime(leader.time)}</div>
             </div>

@@ -47,3 +47,5 @@ https://skypro-web-developer.github.io/react-memo/
 
 # Затраченное время на hw-5.1 
 6 часов
+# Затраченное время на hw-5.2 
+7 часов
