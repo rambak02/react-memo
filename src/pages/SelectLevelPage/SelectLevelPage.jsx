@@ -29,6 +29,9 @@ export function SelectLevelPage() {
           <input className={styles.easyModeInput} onClick={easyModeToggle} type="checkbox" name="checkbox" />
           Легкий режим
         </label>
+        <Link to="/leaderboard">
+          <div className={styles.linkLeaderboard}>Перейти к лидерборду</div>
+        </Link>
       </div>
     </div>
   );
