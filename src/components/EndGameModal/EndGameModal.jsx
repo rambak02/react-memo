@@ -5,7 +5,7 @@ import { Button } from "../Button/Button";
 import deadImageUrl from "./images/dead.png";
 import celebrationImageUrl from "./images/celebration.png";
 import { useLeaderContext } from "../../context/hooks/useLeader";
-import { addUser } from "../../api";
+import { addUser, getLeaders } from "../../api";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -22,7 +22,8 @@ export const EndGameModal = ({ isWon, gameDurationSeconds, gameDurationMinutes, 
           setError("Укажите имя для лидербоарда");
         } else {
           const data = { name: username, time: gameTime };
-          const response = await addUser(data);
+          await addUser(data);
+          const response = await getLeaders();
           setLeaders(response.leaders);
           navigate("/leaderboard");
         }
