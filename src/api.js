@@ -1,6 +1,6 @@
 const baseUrl = "https://wedev-api.sky.pro/api/leaderboard";
 
-export async function getLeaderboard() {
+export async function getLeaders() {
   const response = await fetch(baseUrl, {
     method: "GET",
   });
