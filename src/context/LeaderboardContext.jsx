@@ -6,6 +6,14 @@ export const LeadersContext = createContext(null);
 export const LeadersProvider = ({ children }) => {
   const [leaders, setLeaders] = useState([]);
   const [loaded, setLoaded] = useState(false);
+  const [leaderboardMode, setLeaderboardMode] = useState(false);
+
+  const leaderboardModeOn = () => {
+    setLeaderboardMode(true);
+  };
+  const leaderboardModeOff = () => {
+    setLeaderboardMode(false);
+  };
 
   useEffect(() => {
     const fetchLeaders = async () => {
@@ -20,5 +28,11 @@ export const LeadersProvider = ({ children }) => {
     };
     fetchLeaders();
   }, []);
-  return <LeadersContext.Provider value={{ leaders, setLeaders, loaded }}>{children}</LeadersContext.Provider>;
+  return (
+    <LeadersContext.Provider
+      value={{ leaders, setLeaders, loaded, leaderboardModeOff, leaderboardModeOn, leaderboardMode }}
+    >
+      {children}
+    </LeadersContext.Provider>
+  );
 };

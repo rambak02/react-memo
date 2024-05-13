@@ -11,3 +11,19 @@ export async function getLeaders() {
     return response.json();
   }
 }
+
+export async function addUser({ name, time }) {
+  const response = await fetch(baseUrl, {
+    method: "POST",
+    body: JSON.stringify({
+      name,
+      time,
+    }),
+  });
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.error);
+  } else if (response.status === 200) {
+    return response.json();
+  }
+}
