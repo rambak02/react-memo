@@ -16,17 +16,21 @@ export const EndGameModal = ({ isWon, gameDurationSeconds, gameDurationMinutes, 
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const handleUsername = async () => {
-    try {
-      if (username === "") {
-        setError("Укажите имя для лидербоарда");
-      } else {
-        const data = { name: username, time: gameTime };
-        const response = await addUser(data);
-        setLeaders(response.leaders);
-        navigate("/leaderboard");
+    if (leaderboardMode) {
+      try {
+        if (username === "") {
+          setError("Укажите имя для лидербоарда");
+        } else {
+          const data = { name: username, time: gameTime };
+          const response = await addUser(data);
+          setLeaders(response.leaders);
+          navigate("/leaderboard");
+        }
+      } catch (error) {
+        setError(error.message);
       }
-    } catch (error) {
-      setError(error.message);
+    } else {
+      navigate("/leaderboard");
     }
   };
   const title = leaderboardMode && isWon ? "Вы попали на Лидерборд" : isWon ? "Вы победили!" : "Вы проиграли!";

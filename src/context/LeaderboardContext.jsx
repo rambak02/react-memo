@@ -12,7 +12,7 @@ export const LeadersProvider = ({ children }) => {
     setLeaderboardMode(true);
   };
   const leaderboardModeOff = () => {
-    setLeaderboardMode(false);
+    setLeaderboardMode(true);
   };
 
   useEffect(() => {
