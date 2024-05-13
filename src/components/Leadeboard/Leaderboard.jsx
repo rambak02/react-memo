@@ -5,13 +5,13 @@ import { useLeaderContext } from "../../context/hooks/useLeader";
 import { formatTime } from "../helpers/helpers";
 
 export const Leaderboard = () => {
-  const { leaders, loaded } = useLeaderContext();
+  const { leaders, loaded, leaderboardModeOn } = useLeaderContext();
   return (
     <div className={styles.container}>
       <div className={styles.header}>
         <div className={styles.title}>Лидербоард</div>
         <Link to="/game/9">
-          <Button>Начать игру</Button>
+          <Button onClick={leaderboardModeOn}>Начать игру</Button>
         </Link>
       </div>
       <div className={styles.columnTitle}>
