@@ -10,7 +10,6 @@ export const Leaderboard = () => {
     return a.time - b.time;
   });
   setLeaders(newLeaders);
-  console.log("render");
 
   return (
     <div className={styles.container}>
