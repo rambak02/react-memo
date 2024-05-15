@@ -6,8 +6,10 @@ import { EndGameModal } from "../../components/EndGameModal/EndGameModal";
 import { Button } from "../../components/Button/Button";
 import { Card } from "../../components/Card/Card";
 import { useEasyModeContext } from "../../context/hooks/useEasyMode";
+import { SuperPowerModal } from "../SuperPowerModal/SuperPowerModal";
 
 // Игра закончилась
+const STATUS_PAUSE = "STATUS_PAUSE";
 const STATUS_LOST = "STATUS_LOST";
 const STATUS_WON = "STATUS_WON";
 // Идет игра: карты закрыты, игрок может их открыть
@@ -50,11 +52,14 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
   const [cards, setCards] = useState([]);
   // Текущий статус игры
   const [status, setStatus] = useState(STATUS_PREVIEW);
-
+  //состояние использование суперсилы
+  const [useEyes, setUseEyes] = useState(false);
   // Дата начала игры
   const [gameStartDate, setGameStartDate] = useState(null);
   // Дата конца игры
   const [gameEndDate, setGameEndDate] = useState(null);
+  //Pause
+  const [timePause, setTimePause] = useState(false);
 
   // Стейт для таймера, высчитывается в setInteval на основе gameStartDate и gameEndDate
   const [timer, setTimer] = useState({
@@ -77,6 +82,7 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
     setGameStartDate(null);
     setGameEndDate(null);
     setTimer(getTimerValue(null, null));
+    setUseEyes(false);
     setStatus(STATUS_PREVIEW);
     if (easyGameMode) {
       setLifes(3);
@@ -189,12 +195,36 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
   // Обновляем значение таймера в интервале
   useEffect(() => {
     const intervalId = setInterval(() => {
+      if (timePause) return;
       setTimer(getTimerValue(gameStartDate, gameEndDate));
     }, 300);
     return () => {
       clearInterval(intervalId);
     };
-  }, [gameStartDate, gameEndDate]);
+  }, [gameStartDate, gameEndDate, timePause]);
+
+  //Логика использования суперсилы
+  const handleSuperPower = () => {
+    const cardsBeforePower = cards;
+    setCards(
+      cards.map(card => {
+        return { ...card, open: true };
+      }),
+    );
+    setStatus(STATUS_PAUSE);
+    setTimePause(true);
+    setTimeout(() => {
+      setCards(cardsBeforePower);
+      setStatus(STATUS_IN_PROGRESS);
+      setUseEyes(true);
+      setTimePause(false);
+      setGameStartDate(prevState => {
+        const currentStartDate = new Date(prevState);
+        currentStartDate.setSeconds(currentStartDate.getSeconds() + 5);
+        return currentStartDate;
+      });
+    }, 5000);
+  };
 
   return (
     <div className={styles.container}>
@@ -219,6 +249,7 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
             </>
           )}
         </div>
+        {status === STATUS_IN_PROGRESS ? <SuperPowerModal useEyes={useEyes} onClick={handleSuperPower} /> : null}
         {easyGameMode && <div className={styles.lifeImage}>Жизней: {lifes}</div>}
         {status === STATUS_IN_PROGRESS ? <Button onClick={resetGame}>Начать заново</Button> : null}
       </div>
