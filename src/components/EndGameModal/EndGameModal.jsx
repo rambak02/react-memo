@@ -8,20 +8,33 @@ import { useLeaderContext } from "../../context/hooks/useLeader";
 import { addUser, getLeaders } from "../../api";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useEasyModeContext } from "../../context/hooks/useEasyMode";
 
-export const EndGameModal = ({ isWon, gameDurationSeconds, gameDurationMinutes, onClick }) => {
+export const EndGameModal = ({ isWon, gameDurationSeconds, gameDurationMinutes, onClick, useEyes }) => {
   const { leaderboardMode, setLeaders } = useLeaderContext();
-  const gameTime = gameDurationMinutes * 60 + gameDurationSeconds;
+  const { easyGameMode } = useEasyModeContext();
+  const time = gameDurationMinutes * 60 + gameDurationSeconds;
   const [username, setUsername] = useState("");
+  const achievements = [];
   const [error, setError] = useState("");
   const navigate = useNavigate();
+
+  const addAchivments = () => {
+    if (!easyGameMode) {
+      achievements.push(1);
+    }
+    if (useEyes) {
+      achievements.push(2);
+    }
+  };
   const handleUsername = async () => {
     if (leaderboardMode) {
       try {
         if (username === "") {
           setError("Укажите имя для лидербоарда");
         } else {
-          const data = { name: username, time: gameTime };
+          addAchivments();
+          const data = { name: username, time, achievements };
           await addUser(data);
           const response = await getLeaders();
           setLeaders(response.leaders);
