@@ -47,6 +47,10 @@
   border-radius: 12px;
   background: #fff;
 }
+.level:hover {
+  box-sizing: border-box;
+  border: 2px solid #004980
+}
 
 .levelLink {
   color: #0080c1;
@@ -59,14 +63,16 @@
   text-decoration: none;
 }
 
+
 .levelLink:visited {
   color: #0080c1;
 }
 .easyMode {
+  color: #004980;
   justify-content: center;
   display: flex;
-  font-family: Roboto;
-  font-size: 24px;
+  font-family: StratosSkyeng;
+  font-size: 20px;
   font-weight: 400;
   line-height: 32px;
   text-align: center;
@@ -75,4 +81,13 @@
 }
 .easyModeInput {
   width: 30px;
+}
+.linkLeaderboard {
+  margin-top: 10px;
+  font-family: StratosSkyeng;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 32px;
+  text-align: left;
+  color: #004980;
 }
