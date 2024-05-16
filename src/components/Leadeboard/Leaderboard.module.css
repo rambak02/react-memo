@@ -66,6 +66,6 @@
 }
 .userName {
   display: flex;
-  width: 200px;
+  width: 300px;
   justify-content: center;
 }
