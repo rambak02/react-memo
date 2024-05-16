@@ -12,13 +12,13 @@ export async function getLeaders() {
   }
 }
 
-export async function addUser({ name, time, achivments }) {
+export async function addUser({ name, time, achievements }) {
   const response = await fetch(baseUrl, {
     method: "POST",
     body: JSON.stringify({
       name,
       time,
-      achivments,
+      achievements,
     }),
   });
   if (!response.ok) {

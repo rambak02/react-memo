@@ -6,7 +6,7 @@ import { formatTime } from "../helpers/helpers";
 import { achivmentsImages } from "../../utils/achivments";
 
 export const Leaderboard = () => {
-  const { leaders, setLeaders, loaded, leaderboardModeOn } = useLeaderContext();
+  const { leaders, setLeaders, loaded, leaderboardModeOff } = useLeaderContext();
   const newLeaders = leaders.sort((a, b) => {
     return a.time - b.time;
   });
@@ -16,8 +16,8 @@ export const Leaderboard = () => {
     <div className={styles.container}>
       <div className={styles.header}>
         <div className={styles.title}>Лидербоард</div>
-        <Link to="/game/9">
-          <Button onClick={leaderboardModeOn}>Начать игру</Button>
+        <Link to="/">
+          <Button onClick={leaderboardModeOff}>Начать игру</Button>
         </Link>
       </div>
       <div className={styles.columnTitle}>
@@ -32,15 +32,17 @@ export const Leaderboard = () => {
             <div key={leader.id} className={styles.user}>
               <div className={styles.rating}>#{index + 1}</div>
               <div className={styles.userName}>{leader.name}</div>
-              <div className={styles.achivments}>
-                <img
-                  src={leader.achievements.includes(1) ? achivmentsImages.enable[1] : achivmentsImages.disable[1]}
-                  alt="achivka"
-                />
-                <img
-                  src={leader.achievements.includes(2) ? achivmentsImages.enable[2] : achivmentsImages.disable[2]}
-                  alt="achivka"
-                />
+              <div className={styles.wewe}>
+                <div className={styles.achivments}>
+                  <img
+                    src={leader.achievements.includes(1) ? achivmentsImages.enable[1] : achivmentsImages.disable[1]}
+                    alt="achivka"
+                  />
+                  <img
+                    src={leader.achievements.includes(2) ? achivmentsImages.enable[2] : achivmentsImages.disable[2]}
+                    alt="achivka"
+                  />
+                </div>
               </div>
               <div className={styles.userTime}>{formatTime(leader.time)}</div>
             </div>

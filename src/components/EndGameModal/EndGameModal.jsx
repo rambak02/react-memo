@@ -15,16 +15,18 @@ export const EndGameModal = ({ isWon, gameDurationSeconds, gameDurationMinutes, 
   const { easyGameMode } = useEasyModeContext();
   const time = gameDurationMinutes * 60 + gameDurationSeconds;
   const [username, setUsername] = useState("");
-  const achievements = [];
+  const [achievements, setAchievements] = useState([]);
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const addAchivments = () => {
+    //если игра пройдена не легком режиме
     if (!easyGameMode) {
-      achievements.push(1);
+      setAchievements(achievements.push(1));
     }
-    if (useEyes) {
-      achievements.push(2);
+    //если игра пройдена без использования суперсилы
+    if (!useEyes) {
+      setAchievements(achievements.push(2));
     }
   };
   const handleUsername = async () => {
