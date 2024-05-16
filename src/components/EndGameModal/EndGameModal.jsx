@@ -7,7 +7,7 @@ import celebrationImageUrl from "./images/celebration.png";
 import { useLeaderContext } from "../../context/hooks/useLeader";
 import { addUser, getLeaders } from "../../api";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useEasyModeContext } from "../../context/hooks/useEasyMode";
 
 export const EndGameModal = ({ isWon, gameDurationSeconds, gameDurationMinutes, onClick, useEyes }) => {
@@ -15,27 +15,29 @@ export const EndGameModal = ({ isWon, gameDurationSeconds, gameDurationMinutes, 
   const { easyGameMode } = useEasyModeContext();
   const time = gameDurationMinutes * 60 + gameDurationSeconds;
   const [username, setUsername] = useState("");
-  const [achievements, setAchievements] = useState([]);
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const addAchivments = () => {
-    //если игра пройдена не легком режиме
+  const getAchievements = () => {
+    const achievements = [];
+    // если игра пройдена не легком режиме
     if (!easyGameMode) {
-      setAchievements(achievements.push(1));
+      achievements.push(1);
     }
-    //если игра пройдена без использования суперсилы
+    // если игра пройдена без использования суперсилы
     if (!useEyes) {
-      setAchievements(achievements.push(2));
+      achievements.push(2);
     }
+    return achievements;
   };
+
+  const achievements = getAchievements();
   const handleUsername = async () => {
     if (leaderboardMode) {
       try {
         if (username === "") {
           setError("Укажите имя для лидербоарда");
         } else {
-          addAchivments();
           const data = { name: username, time, achievements };
           await addUser(data);
           const response = await getLeaders();
@@ -76,9 +78,17 @@ export const EndGameModal = ({ isWon, gameDurationSeconds, gameDurationMinutes, 
       <Button className={styles.button} onClick={onClick}>
         Начать сначала
       </Button>
-      <div onClick={handleUsername} className={styles.linkLeaderboard}>
-        Перейти к лидерборду
-      </div>
+      {isWon ? (
+        <div onClick={handleUsername} className={styles.linkLeaderboard}>
+          Перейти к лидерборду
+        </div>
+      ) : (
+        <Link to="/leaderboard">
+          <div onClick={handleUsername} className={styles.linkLeaderboard}>
+            Перейти к лидерборду
+          </div>
+        </Link>
+      )}
     </div>
   );
 };
