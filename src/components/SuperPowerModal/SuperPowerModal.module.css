@@ -1,0 +1,26 @@
+.container {
+  position: absolute;
+  background-color: #c2f5ff;
+  width: 222px;
+  max-height: 223px;
+  border-radius: 12px;
+  font-family: StratosSkyeng;
+  font-size: 18px;
+  line-height: 24px;
+  text-align: center;
+  color: #004980;
+  z-index: 2;
+  box-sizing: border-box;
+}
+.title {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 24px;
+}
+.text {
+  font-weight: 400;
+}
+.images {
+    filter: grayscale(1);
+    margin: 4px;
+  }
